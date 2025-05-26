@@ -1,0 +1,16 @@
+{
+  "name": "@orta/graphqxl-node",
+  "version": "0.1.0",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "native"
+  ],
+  "scripts": {
+    "build": "napi build --release"
+  },
+  "devDependencies": {
+    "napi": "^2.16.17"
+  }
+}

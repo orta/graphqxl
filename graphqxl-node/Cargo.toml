@@ -1,0 +1,16 @@
+[package]
+name = "graphqxl-node"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+napi = "2.16.13"
+napi-derive = "2.16.13"
+
+graphqxl_parser = { path = "../graphqxl_parser" }
+graphqxl_synthesizer = { path = "../graphqxl_synthesizer" }
+graphqxl_transpiler = { path = "../graphqxl_transpiler" }
+anyhow = "1"
+
+[lib]
+crate-type = ["cdylib"]
