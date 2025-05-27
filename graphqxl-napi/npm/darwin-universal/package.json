@@ -1,0 +1,15 @@
+{
+  "name": "@orta/graphqxl-darwin-universal",
+  "version": "0.0.0",
+  "os": [
+    "darwin"
+  ],
+  "main": "graphqxl.darwin-universal.node",
+  "files": [
+    "graphqxl.darwin-universal.node"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">= 10"
+  }
+}

@@ -351,6 +351,70 @@ fn check_import_loop(import_stack: &Vec<PathBuf>, span: &OwnedSpan) -> Result<()
     Ok(())
 }
 
+
+/// Trait for a virtual file system.
+pub trait VirtualFileSystem {
+    fn read_to_string(&self, path: &Path) -> Result<String, Box<dyn Error>>;
+    fn canonicalize(&self, path: &Path) -> Result<PathBuf, Box<dyn Error>>;
+    fn exists(&self, path: &Path) -> bool;
+}
+
+/// VFS-based version of private_parse_spec
+fn private_parse_spec_vfs<P: AsRef<Path>>(
+    path: P,
+    import_stack: Vec<PathBuf>,
+    already_imported: &mut HashSet<PathBuf>,
+    vfs: &dyn VirtualFileSystem,
+) -> Result<Spec, Box<dyn Error>> {
+    let abs_path = vfs.canonicalize(path.as_ref())?;
+    let file = abs_path.to_str().unwrap();
+
+    let mut spec = Spec::new();
+    if already_imported.contains(&abs_path) {
+        return Ok(spec);
+    }
+    let content = vfs.read_to_string(&abs_path)?;
+    let mut pairs = GraphqxlParser::parse(Rule::spec, &content)?;
+    let pair = pairs.next().unwrap();
+    match pair.as_rule() {
+        Rule::spec => {
+            for child in pair.into_inner() {
+                if let Rule::EOI = &child.as_rule() {
+                    // nothing to do here
+                } else if let Rule::import = &child.as_rule() {
+                    let import = parse_import(child.clone(), file)?;
+                    let file_name = if import.file_name.ends_with(".graphqxl") {
+                        import.file_name
+                    } else {
+                        import.file_name + ".graphqxl"
+                    };
+                    let file_dir = abs_path.parent().unwrap();
+                    let import_path = Path::new(file_dir).join(&file_name);
+                    if !vfs.exists(&import_path) {
+                        return Err(import.span.make_error(
+                            format!("file {:?} does not exist", import_path).as_str(),
+                        ));
+                    }
+                    let mut stack = import_stack.clone();
+                    stack.push(import_path.clone());
+                    check_import_loop(&stack, &import.span)?;
+                    let imported_spec =
+                        private_parse_spec_vfs(import_path, stack, already_imported, vfs)?;
+                    spec.merge(imported_spec)?;
+                } else {
+                    spec.add(child, file)?;
+                }
+            }
+            already_imported.insert(abs_path.clone());
+            Ok(spec)
+        }
+        _unknown => Err(Box::new(unknown_rule_error(pair, "spec"))),
+    }
+}
+pub fn parse_spec_vfs<P: AsRef<Path>>(path: P, vfs: &dyn VirtualFileSystem) -> Result<Spec, Box<dyn Error>> {
+    private_parse_spec_vfs(path, Vec::new(), &mut HashSet::new(), vfs)
+}
+
 fn private_parse_spec<P: AsRef<Path>>(
     path: P,
     import_stack: Vec<PathBuf>,

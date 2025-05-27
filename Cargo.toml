@@ -16,6 +16,7 @@ members = [
     "graphqxl_parser",
     "graphqxl_synthesizer",
     "graphqxl_transpiler",
+    "graphqxl-napi",
 ]
 
 [dependencies]
