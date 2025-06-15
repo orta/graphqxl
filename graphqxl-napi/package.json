@@ -1,8 +1,35 @@
 {
   "name": "@orta/graphqxl",
   "version": "0.0.0",
+  "description": "Node.js bindings for GraphQXL - A GraphQL schema language with imports, generics, and more",
   "main": "index.js",
   "types": "index.d.ts",
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "README.md",
+    "LICENSE",
+    "*.node"
+  ],
+  "keywords": [
+    "graphql",
+    "graphqxl",
+    "schema",
+    "sdl",
+    "generics",
+    "imports",
+    "napi",
+    "rust"
+  ],
+  "author": "Orta Therox",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gabotechs/graphqxl.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gabotechs/graphqxl/issues"
+  },
+  "homepage": "https://github.com/gabotechs/graphqxl#readme",
   "napi": {
     "name": "graphqxl",
     "triples": {
@@ -40,6 +67,7 @@
     "build:debug": "napi build --platform",
     "prepublishOnly": "napi prepublish -t npm",
     "test": "ava",
+    "example": "node example.js",
     "universal": "napi universal",
     "version": "napi version"
   },
