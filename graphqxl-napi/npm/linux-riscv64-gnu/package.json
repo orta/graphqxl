@@ -7,6 +7,10 @@
   "cpu": [
     "riscv64"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/orta/graphqxl"
+  },
   "main": "graphqxl.linux-riscv64-gnu.node",
   "files": [
     "graphqxl.linux-riscv64-gnu.node"
