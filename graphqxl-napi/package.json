@@ -1,6 +1,6 @@
 {
   "name": "@orta/graphqxl",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Node.js bindings for GraphQXL - A GraphQL schema language with imports, generics, and more",
   "main": "index.js",
   "types": "index.d.ts",
