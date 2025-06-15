@@ -7,6 +7,10 @@
   "cpu": [
     "arm"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/orta/graphqxl"
+  },
   "main": "graphqxl.linux-arm-musleabihf.node",
   "files": [
     "graphqxl.linux-arm-musleabihf.node"
